@@ -1,0 +1,31 @@
+//- Navbar mixins
+mixin nav(name, id, style)
+    - var style = (typeof style === 'undefined') ? "default" : style
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        a.navbar-brand(href='#') Navbar
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+            
+        #navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+            block
+ 
+mixin nav_item(href, active)
+    li.nav-item(class = active): a.nav-link(href=href)
+        block
+ 
+mixin nav_item_dropdown(href, active)
+    li(class=["dropdown", active])
+        a.dropdown-toggle( href=href, data-toggle="dropdown", role="button", aria-expanded="false" )= attributes.label
+            span.caret
+        ul.dropdown-menu( role="menu" )
+            block
+ 
+mixin nav_divider
+    li.divider
+ 
+mixin nav_header
+    li.dropdown-header
+        block
+ 
+//- End navbar mixins

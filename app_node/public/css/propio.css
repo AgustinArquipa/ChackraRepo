@@ -1,0 +1,103 @@
+html, body{
+    height: 100%;
+}
+
+body{
+    align-items: center;
+    background: #34495e;
+    color: #fff
+}
+
+body > h1{
+    color: #fff;
+}
+
+h1#temperatura{
+    color: #000
+}
+
+.texto_verde{
+    color: green !important;
+}
+
+.texto_rojo{
+    color: red !important;
+}
+
+.card h1{
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+    font-weight: bold
+}
+
+.card h2{
+    font-size: 18px;
+    color: #000;
+}
+
+.card h3{
+    font-size: 15px;
+    color: #000;
+    text-align: center
+}
+
+.lampara{
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    margin: auto
+}
+
+.countdown{
+    color: #000;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold
+}
+
+#temperatura{
+    text-align: center;
+    font-weight: bold;
+    color: #000;
+}
+
+.baja{
+    color: blue;
+    font-weight: bold
+}
+
+.alta{
+    color: red;
+    font-weight: bold
+}
+
+.normal{
+    color: green;
+    font-weight: bold
+}
+
+.card{
+    width: 200px;
+}
+
+.igual_exterior{
+    background: #FAF5E7;
+    border: 2px solid #000
+}
+
+.card.exterior{
+    width: 300px
+}
+
+.card{
+    color: #000000
+}
+
+.alert_task{
+    font-size: 10px;
+    text-align: center
+}
+#alert_sensado{
+    display: none
+}

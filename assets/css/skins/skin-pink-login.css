@@ -1,0 +1,47 @@
+/*
+ * Skin: pink
+ * ------------
+ */
+.login-page, .register-page {
+    background: #FEF7FA
+}
+
+.login-box-body, .register-box-body{
+    border: #F284B4 2px solid;
+}
+a {
+    color: #F284B4;
+}
+
+
+.btn-primary {
+    background-color: #E12466;
+    border-color: #F284B4;
+}
+
+.btn-primary:hover {
+    background-color: #333;
+    border-color: #222;
+}
+
+.btn-info {
+    background-color: #F284B4;
+    border-color: #F284B4;
+}
+
+.btn-info:hover {
+    background-color: #666;
+    border-color: #222;
+}
+
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #F284B4;
+    border-color: #E12466;
+}
+
+.fixed .content-wrapper, .fixed .right-side{
+    min-height: 235px;
+    background: url("../../img/logo_cekis.png") 50% 50% no-repeat;    
+}
+

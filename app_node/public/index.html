@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Chacra Experimental</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="js/jquery-3.3.1.slim.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/fontawesome.5.7.2.all.css">
+        <link rel="stylesheet" href="css/propio.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row ">
+                <div class="col-md-12">
+                    <a href="http://localhost:2016/chacra/web/exportaciones" class="btn btn-primary float-right btn_configuracion mr-1">
+                        Exportaciones
+                    </a>
+                    <a href="http://localhost:2016/chacra/web/mediciones" class="btn btn-primary float-right btn_configuracion mr-1">
+                        Mediciones
+                    </a>
+                    <a href="http://localhost:2016/chacra/web/horarios" class="btn btn-primary float-right btn_configuracion mr-1">
+                        Horarios
+                    </a>
+                    <a href="http://localhost:2016/chacra" class="btn btn-primary float-right btn_configuracion mr-1">
+                        Componentes
+                    </a>
+                    <a href="#" id="btn_resetear" class="btn btn-primary float-right btn_configuracion mr-1">
+                        Resetear Controladores
+                    </a>
+                    <a href="#" class="btn btn-danger btn-sm float-right mr-1" id="btn_apagar_alarma">Apagar Alarma</a>
+                    <button href="#" class="btn btn-success btn-sm float-right mr-1 accionadores" id="btn_encender_pic">Reiniciar Placa</button>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">        
+            <div class="row text-center mt-4 mb-4">
+                <div class="col-md-12">
+                    <h1>Control de Luces y Sensores de Temperatura / Ambiente</h1> 
+                    <h2 id="hora_servidor"></h2>       
+                </div>                
+            </div>
+            <div class="row justify-content-center align-self-center"> 
+                <div class="card mb-3 mr-3 p-2 text-center exterior igual_exterior">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Temperatura Exterior</h1>            
+                    <h1 id="temperatura-T00"><img src="temperatura.png" width="40" class="img-fluid "></h1>
+                    <h3 id="hora-T00"></h3>
+                </div> 
+                <div class="card mb-3 mr-3 p-2 text-center exterior">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Humedad Exterior</h1>            
+                    <h1 id="humedad-T00"><img src="humedad.png" width="40" class="img-fluid"></h1>
+                    <h3 id="hora-0T00"></h3>
+                </div> 
+            </div>
+            <div class="row justify-content-center align-self-center">            
+                <div class="card mb-3 mr-3 p-2" id="L01">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Cámara 01</h1> 
+                    <h2 >Luces: </h2>
+                    <img src="focus.png" class="img-fluid lampara mb-3 foco" >               
+                    <div id="room-L01" class="countdown"></div>
+                    <button id="btn_encender_L01" class="btn btn-success accionadores">Encender</button>
+                    <button id="btn_apagar_L01" class="btn btn-danger d-none accionadores">Apagar</button>
+                    <div id="alert_task_L01" class="alert_task"></div>
+                </div> 
+                <div class="card mb-3 mr-3 p-2" id="L02">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Cámara 02</h1>
+                    <h2 >Luces: </h2>
+                    <img src="focus.png" class="img-fluid lampara mb-3 foco"> 
+                    <div id="room-L02" class="countdown"></div>
+                    <button id="btn_encender_L02" class="btn btn-success accionadores">Encender</button>
+                    <button id="btn_apagar_L02" class="btn btn-danger d-none accionadores">Apagar</button>
+                    <div id="alert_task_L02" class="alert_task"></div>
+                </div>
+                <div class="card mb-3 mr-3 p-2" id="L03">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Cámara 03</h1>
+                    <h2 >Luces: </h2>
+                    <img src="focus.png" class="img-fluid lampara mb-3 foco">   
+                    <div id="room-L03" class="countdown"></div>
+                    <button id="btn_encender_L03" class="btn btn-success accionadores">Encender</button>
+                    <button id="btn_apagar_L03" class="btn btn-danger d-none accionadores">Apagar</button>
+                    <div id="alert_task_L03" class="alert_task"></div>
+                </div> 
+                <div class="card mb-3 mr-3 p-2" id="L04">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Cámara 04</h1>
+                    <h2 >Luces: </h2>
+                    <img src="focus.png" class="img-fluid lampara mb-3 foco"> 
+                    <div id="room-L04" class="countdown"></div>
+                    <button id="btn_encender_L04" class="btn btn-success accionadores">Encender</button>
+                    <button id="btn_apagar_L04" class="btn btn-danger d-none accionadores">Apagar</button>
+                    <div id="alert_task_L04" class="alert_task"></div>
+                </div>  
+                <div class="card mb-3 mr-3 p-2" id="L05">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Invernadero</h1>
+                    <h2 >Luces: </h2>
+                    <img src="focus.png" class="img-fluid lampara mb-3 foco"> 
+                    <div id="room-L05" class="countdown"></div>
+                    <button id="btn_encender_L05" class="btn btn-success accionadores">Encender</button>
+                    <button id="btn_apagar_L05" class="btn btn-danger d-none accionadores">Apagar</button>
+                    <div id="alert_task_L05" class="alert_task"></div>
+                </div>            
+            </div>
+            <div class="row justify-content-center align-self-center"> 
+                <div class="alert alert-warning col-md-12 text-center" id="alert_sensado">
+                    <strong>Ejecutandose mediciones de Sensores.</strong> 
+                </div>           
+                <div class="card mb-3 mr-3 p-2" id="T01">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 01</h1> 
+                    <h2 id="temperatura-T01"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T01"><img src="humedad.png" width="40" class="img-fluid"></h2>
+                    <h3 id="hora-T01"></h3>
+                    <h3 id="aviso_exterior-T01"></h3>
+                    <!--<a href="#" id="btn_sensor_T01" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div> 
+                <div class="card mb-3 mr-3 p-2" id="T02">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 02</h1> 
+                    <h2 id="temperatura-T02"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T02"><img src="humedad.png" width="40" class="img-fluid"> </h2>
+                    <h3 id="hora-T02"></h3>
+                    <h3 id="aviso_exterior-T02"></h3>
+                    <!--<a href="#" id="btn_sensor_T02" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div>
+                <div class="card mb-3 mr-3 p-2" id="T03">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 03</h1> 
+                    <h2 id="temperatura-T03"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T03"><img src="humedad.png" width="40" class="img-fluid"></h2>
+                    <h3 id="hora-T03"></h3>
+                    <h3 id="aviso_exterior-T03"></h3>
+                    <!--<a href="#" id="btn_sensor_T03" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div> 
+                <div class="card mb-3 mr-3 p-2" id="T04">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 04</h1> 
+                    <h2 id="temperatura-T04"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T04"><img src="humedad.png" width="40" class="img-fluid"></h2>
+                    <h3 id="hora-T04"></h3>
+                    <h3 id="aviso_exterior-T04"></h3>
+                    <!--<a href="#" id="btn_sensor_T04" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div>  
+                <div class="card mb-3 mr-3 p-2" id="T05">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 05</h1> 
+                    <h2 id="temperatura-T05"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T05"><img src="humedad.png" width="40" class="img-fluid"></h2>
+                    <h3 id="hora-T05"></h3>
+                    <h3 id="aviso_exterior-T05"></h3>
+                    <!--<a href="#" id="btn_sensor_T05" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div>  
+                <div class="card mb-3 mr-3 p-2" id="T06">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 06</h1> 
+                    <h2 id="temperatura-T06"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T06"><img src="humedad.png" width="40" class="img-fluid"></h2>
+                    <h3 id="hora-T06"></h3>
+                    <h3 id="aviso_exterior-T06"></h3>
+                    <!--<a href="#" id="btn_sensor_T05" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div> 
+                <div class="card mb-3 p-2" id="T07">
+                    <h1 class="display-1 pl-3 pr-3 pt-2 pb-2">Sensor 07</h1> 
+                    <h2 id="temperatura-T07"><img src="temperatura.png" width="40" class="img-fluid "></h2>
+                    <h2 id="humedad-T07"><img src="humedad.png" width="40" class="img-fluid"></h2>
+                    <h3 id="hora-T07"></h3>
+                    <h3 id="aviso_exterior-T07"></h3>
+                    <!--<a href="#" id="btn_sensor_T05" class="btn_sensor"><i class="fas fa-sync-alt"></i></a>-->
+                </div>           
+            </div>
+            <div class="row text-center mt-4 mb-4">
+                <div class="col-md-12">
+                    <p>Desarrollado por HandTec - ReproiSa</p>        
+                </div>  
+            </div>
+            <div id="modal_configuracion" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header"></div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+        <script src="js/sweetalert28.js"></script>
+        <!--<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>-->
+        <script src="js/alertify.min.js"></script>
+        <link rel="stylesheet" href="css/alertify.min.css"/>
+        <link rel="stylesheet" href="css/alertify.bootstrap.min.css"/>
+        <script src="main_db.js"charset="utf-8"></script>
+    </body>
+</html>

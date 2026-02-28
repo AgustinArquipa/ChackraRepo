@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Countdown Test</title>
+  </head>
+  <body>
+      
+    <div id="hora_servidor">
+
+    </div>
+    <div id="room-1" class="countdown"></div>
+      <div id="extra-info-1" class="extra"></div>
+      <button id="start" data-id="1">Start</button>
+      <button id="reset-1">Reset!</button>
+    <button id="add-1">Add</button>
+
+    <div id="room-2" class="countdown"></div>
+    <button id="reset-2">Reset!</button>
+    <button id="add-2">Add</button>
+
+    <div id="room-3" class="countdown"></div>
+    <button id="reset-3">Reset!</button>
+    <button id="add-3">Add</button>
+
+
+    <audio id="my_audio" controls preload="none">
+        <source src="http://10.0.0.118:2016/chacra/sonido.mp3" type="audio/mpeg">
+    </audio>
+      
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'> 
+    <style>
+        .extra{
+            display: none
+        }
+        
+        .countdown {
+          font-family: 'Black Ops One', cursive;
+          font-size: 90px;
+        }
+
+        button.thoughtbot {  
+          background-color: #ee432e;
+          background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ee432e), color-stop(50%, #c63929), color-stop(50%, #b51700), color-stop(100%, #891100));
+          background-image: -webkit-linear-gradient(top, #ee432e 0%, #c63929 50%, #b51700 50%, #891100 100%);
+          background-image: -moz-linear-gradient(top, #ee432e 0%, #c63929 50%, #b51700 50%, #891100 100%);
+          background-image: -ms-linear-gradient(top, #ee432e 0%, #c63929 50%, #b51700 50%, #891100 100%);
+          background-image: -o-linear-gradient(top, #ee432e 0%, #c63929 50%, #b51700 50%, #891100 100%);
+          background-image: linear-gradient(top, #ee432e 0%, #c63929 50%, #b51700 50%, #891100 100%);
+          border: 1px solid #951100;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+          -webkit-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px #333333;
+          -moz-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px #333333;
+          box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px #333333;
+          color: #fff;
+          font: bold 20px "helvetica neue", helvetica, arial, sans-serif;
+          line-height: 1;
+          padding: 12px 0 14px 0;
+          text-align: center;
+          text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.8);
+          width: 150px;
+        }
+
+        button.thoughtbot:hover {  
+          background-color: #f37873;
+          background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f37873), color-stop(50%, #db504d), color-stop(50%, #cb0500), color-stop(100%, #a20601));
+          background-image: -webkit-linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601 100%);
+          background-image: -moz-linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601 100%);
+          background-image: -ms-linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601 100%);
+          background-image: -o-linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601 100%);
+          background-image: linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601 100%);
+          cursor: pointer;
+        }
+
+        button.thoughtbot:active {  
+          background-color: #d43c28;
+          background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #d43c28), color-stop(50%, #ad3224), color-stop(50%, #9c1500), color-stop(100%, #700d00));
+          background-image: -webkit-linear-gradient(top, #d43c28 0%, #ad3224 50%, #9c1500 50%, #700d00 100%);
+          background-image: -moz-linear-gradient(top, #d43c28 0%, #ad3224 50%, #9c1500 50%, #700d00 100%);
+          background-image: -ms-linear-gradient(top, #d43c28 0%, #ad3224 50%, #9c1500 50%, #700d00 100%);
+          background-image: -o-linear-gradient(top, #d43c28 0%, #ad3224 50%, #9c1500 50%, #700d00 100%);
+          background-image: linear-gradient(top, #d43c28 0%, #ad3224 50%, #9c1500 50%, #700d00 100%);
+          -webkit-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
+          -moz-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
+          box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
+        }
+    </style>   
+    <script>
+        $(document).ready(function(){
+            setTimeout(function(){
+                $(".my_audio").trigger('load');
+            },1000);                    
+        });
+        
+
+        //var socket = io('10.0.0.118:8880');
+        var socket = io('localhost:8880');
+        var rooms = new Array();
+        
+        $('.start').click(function() {
+            var id = $(this).data('id');
+            socket.emit('click:start');
+        });
+
+        $('#stop').click(function() {
+            socket.emit('click:stop');
+        });
+
+        socket.on('hora_servidor', function (data) {
+            $('#hora_servidor').html(data.horaImprimible);
+        });
+
+        socket.on('rooms', function (data) {
+            console.log(data);
+            rooms = data.rooms;
+            rooms.forEach(function(item){
+
+                socket.on('time-'+item, function (data) {
+                    $('#room-'+item).html(data.time);
+                });
+                
+                 $('#reset-'+item).click(function() {
+                    socket.emit('click:reset-'+item);
+                });
+                
+                socket.on('finish-'+item, function(){
+                    
+                    $("#room-"+item).html("Finished");
+                    $("#reset-"+item).remove();
+                    setTimeout(function(){
+                        document.getElementById('my_audio').play();
+                        setTimeout(function(){
+                            document.getElementById('my_audio').pause();
+                            document.getElementById('my_audio').load();
+                        },2000);
+                    },1000);
+                    
+                    
+                });
+                
+                $("#add-"+item).on('click', function(){
+                    socket.emit('time-more-'+item);    
+                    $("#extra-info-"+item).html("5 seg. agregados.").show("slow");
+                })
+                
+                
+            });    
+        });
+
+        function play_audio(task) {
+            if(task == 'play'){
+                $(".my_audio").trigger('play');
+            }
+            if(task == 'stop'){
+                $(".my_audio").trigger('pause');
+                $(".my_audio").prop("currentTime",0);
+            }
+        }
+
+        /*
+        $('form').submit(function(){
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        
+        socket.on('chat message', function(msg){
+            $('#messages').append($('<li>').text(msg));
+        }); 
+        
+        socket.on('timer', function (data) {  
+            $('#counter').html(data.countdown);
+        });
+
+        $('#reset').click(function() {
+            socket.emit('reset');
+        });*/
+    </script>
+  </body>
+</html>

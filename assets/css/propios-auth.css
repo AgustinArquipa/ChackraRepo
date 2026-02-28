@@ -1,0 +1,66 @@
+html {
+    /*background: url(../img/bg_gral.jpg) no-repeat center center fixed !important;*/
+    -webkit-background-size: cover !important;
+    -moz-background-size: cover !important;
+    -o-background-size: cover !important;
+    background-size: cover !important;
+    background: #eee
+} 
+
+.login-logo a, .register-logo a{
+    color: #fff !important
+}
+
+/************ LOGIN *************/
+
+
+.login-box, .register-box {
+    margin: 10% auto !important;
+}
+
+.login-logo h1{
+    line-height: 35px !important;
+    font-size: 60px;
+}
+
+.login-logo h1 b, .login-logo h1 small{
+    color: #fff !important
+}
+
+.login-logo h1 b{
+   font-family: 'Candal', sans-serif;
+}
+.login-logo h1 small{
+    font-family: 'Lobster', cursive;
+}
+
+.btn-primary{
+    background: #76bf4e;
+    border: 1px solid #959FAB
+}
+
+.btn:hover {
+    background: #565658;
+}
+
+.login-logo img{
+    width: 164px
+}
+
+.login-box-body, .register-box-body {
+    border: 4px solid #cb171d !important;
+}
+
+.login-box, .register-box {
+    margin: 5% auto !important;
+}
+
+.login-box-body {
+    background: #333;
+    color: #fff;
+}   
+
+.btn-primary {
+    background: #cb171d !important;
+    border: none;
+}

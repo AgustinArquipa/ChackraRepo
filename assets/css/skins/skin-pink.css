@@ -1,0 +1,182 @@
+/*
+ * Skin: pink
+ * ------------
+ */
+.skin-pink .main-header .navbar {
+  background-color: #F284B4;
+}
+.skin-pink .main-header .navbar .nav > li > a {
+  color: #ffffff;
+}
+.skin-pink .main-header .navbar .nav > li > a:hover,
+.skin-pink .main-header .navbar .nav > li > a:active,
+.skin-pink .main-header .navbar .nav > li > a:focus,
+.skin-pink .main-header .navbar .nav .open > a,
+.skin-pink .main-header .navbar .nav .open > a:hover,
+.skin-pink .main-header .navbar .nav .open > a:focus {
+  background: rgba(0, 0, 0, 0.1);
+  color: #f6f6f6;
+}
+.skin-pink .main-header .navbar .sidebar-toggle {
+  color: #ffffff;
+}
+.skin-pink .main-header .navbar .sidebar-toggle:hover {
+  color: #f6f6f6;
+  background: rgba(0, 0, 0, 0.1);
+}
+.skin-pink .main-header .navbar .sidebar-toggle {
+  color: #fff;
+}
+.skin-pink .main-header .navbar .sidebar-toggle:hover {
+  background-color: #E12466;
+}
+@media (max-width: 767px) {
+  .skin-pink .main-header .navbar .dropdown-menu li.divider {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .skin-pink .main-header .navbar .dropdown-menu li a {
+    color: #fff;
+  }
+  .skin-pink .main-header .navbar .dropdown-menu li a:hover {
+    background: #E12466;
+  }
+}
+.skin-pink .main-header .logo {
+  background-color: #E12466;
+  color: #ffffff;
+  border-bottom: 0px solid transparent;
+}
+.skin-pink .main-header .logo:hover {
+  background-color: #222;
+}
+.skin-pink .main-header li.user-header {
+  background-color: #F284B4;
+}
+.skin-pink .content-header {
+  background: transparent;
+}
+.skin-pink .wrapper,
+.skin-pink .main-sidebar,
+.skin-pink .left-side {
+  background-color: #222d32;
+}
+.skin-pink .user-panel > .info,
+.skin-pink .user-panel > .info > a {
+  color: #fff;
+}
+.skin-pink .sidebar-menu > li.header {
+  color: #E12466;
+  background: #1a2226;
+}
+.skin-pink .sidebar-menu > li > a {
+  border-left: 3px solid transparent;
+}
+.skin-pink .sidebar-menu > li:hover > a,
+.skin-pink .sidebar-menu > li.active > a {
+  color: #ffffff;
+  background: #1e282c;
+  border-left-color: #F284B4;
+}
+.skin-pink .sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: #2c3b41;
+}
+.skin-pink .sidebar a {
+  color: #F284B4;
+}
+.skin-pink .sidebar a:hover {
+  text-decoration: none;
+}
+.skin-pink .treeview-menu > li > a {
+  color: #ccc;
+}
+.skin-pink .treeview-menu > li.active > a,
+.skin-pink .treeview-menu > li > a:hover {
+  color: #ffffff;
+}
+.skin-pink .sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.skin-pink .sidebar-form input[type="text"],
+.skin-pink .sidebar-form .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.skin-pink .sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 2px !important;
+}
+.skin-pink .sidebar-form input[type="text"]:focus,
+.skin-pink .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  background-color: #fff;
+  color: #666;
+}
+.skin-pink .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
+  border-left-color: #fff;
+}
+.skin-pink .sidebar-form .btn {
+  color: #999;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 2px !important;
+  border-bottom-right-radius: 2px !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.content-wrapper, .right-side{
+    background-color: #FEF7FA !important
+}
+
+.box-header.with-border {
+    border-bottom: 1px solid #FEF7FA !important;
+}
+
+.box {
+    border-top: 3px solid #E12466;
+}
+
+a {
+    color: #F284B4;
+}
+
+
+.btn-primary {
+    background-color: #E12466;
+    border-color: #F284B4;
+}
+
+.btn-primary:hover {
+    background-color: #333;
+    border-color: #222;
+}
+
+.btn-info {
+    background-color: #F284B4;
+    border-color: #F284B4;
+}
+
+.btn-info:hover {
+    background-color: #666;
+    border-color: #222;
+}
+
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    background-color: #F284B4;
+    border-color: #E12466;
+}
+
+.fixed .content-wrapper, .fixed .right-side{
+    min-height: 235px;
+    background: url("../../img/logo_cekis.png") 50% 50% no-repeat;    
+}
+

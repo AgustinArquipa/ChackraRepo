@@ -1,0 +1,164 @@
+.logo-lg{
+    font-family: 'Lobster', cursive;
+    font-size: 140%;
+}
+
+.content-wrapper, .right-side {
+    background-color: #eee;
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+.btn-primary{
+    background: #76bf4e;
+    border: 1px solid #959FAB
+}
+
+.btn-primary:hover{
+    background: #565658;
+    border: 1px solid #959FAB
+}
+
+.btn-info{
+    background: #666;
+    border: 1px solid #666
+}
+
+.btn-info:hover{
+    background: #333;
+    border: 1px solid #959FAB
+}
+
+.bg-gris-claro{
+    background: #f9f9f9;
+    color: #76bf4e
+}
+
+.bg-gris{
+    background: #f9f9f9;
+    color: #76bf4e
+}
+
+.info-box-number{
+    font-size: 45px;
+    text-align: right;
+    padding-top: 10px;
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    color: #ccc;
+}
+
+.info-box-text {
+    position: absolute;
+}
+
+.products-list .product-img {
+    font-size: 38px;
+    text-align: center
+}
+
+.box.box-primary {
+    border-top-color: #76bf4e;
+}
+
+.nav-tabs-custom>.nav-tabs>li.active {
+    border-top-color: #76bf4e;
+}
+
+.licencia strong{
+    font-size: 20px
+}
+
+dd {
+    margin-left: 70px;
+}
+
+.form-group.opc{
+    margin-left: 50px
+}
+
+a {
+    color: #ff5e5b;
+}
+
+a:hover {
+    color: #000;
+}
+
+.label-default {
+    background-color: #f9f9f9;
+}
+
+.user-header p{
+    color: #000
+}
+
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
+        background-color: #ff5e5b;
+    border-color: #ff5e5b;
+}
+
+.exspan-bottom {
+    padding-bottom: 0px !important;
+}
+
+.legend .title {
+    display: block;
+    margin-bottom: 0.5em;
+    line-height: 1.2em;
+    padding: 0 0.3em;
+}
+
+.legend .color-sample {
+    display: block;
+    float: left;
+    width: 1em;
+    height: 1em;
+    border: 2px solid; /* Comment out if you don't want to show the fillColor */
+    border-radius: 0.5em; /* Comment out if you prefer squarish samples */
+    margin-right: 0.5em;
+}
+
+
+.btn-primary {
+    background: #ff5e5b !important;
+    border: none;
+}
+
+
+.skin-black .main-header > .navbar > .sidebar-toggle{
+    background: #666;
+    color: #ff5e5b
+}
+
+.skin-black .main-header > .navbar {
+    background-color: #000;
+}
+
+.skin-black .main-header > .logo{
+    background: #000;
+        color: #fff;
+}
+
+.skin-black .main-header:hover > .logo{
+    background: #000
+}
+
+.skin-black .main-header > .navbar .navbar-custom-menu .navbar-nav > li > a, .skin-black .main-header > .navbar .navbar-right > li > a{
+ background: #666;
+    color: #fff;   
+}
+
+
+.skin-black .wrapper, .skin-black .main-sidebar, .skin-black .left-side{
+    background: #333
+}
+
+.skin-black .sidebar-menu > li > .treeview-menu{
+    background: #444;
+}
+    
+.fa{
+    color: #ff5e5b
+}
