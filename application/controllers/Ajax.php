@@ -351,12 +351,26 @@ class Ajax extends Firebase {
 				} else {
 					log_message('ERROR', '[IMPORTAR] Fila ' . $row_idx . ' omitida: hor_fecha no existe o esta vacia');
 				}
-			}  
+			}
 			$data['componente'] = $this->componentes_model->get($id_componente);
-						
+
 			$data['horarios'] = $this->horarios_model->get(NULL, NULL, $id_componente);
 
-			echo $this->load->view('horarios/listado_view', $data, true);  
-		}		
+			// Notificar a Node.js para que reprograme las tareas
+			log_message('ERROR', '[IMPORTAR] Notificando a Node.js para reprogramar tareas...');
+			$node_url = 'https://127.0.0.1:3000/reprogramar-tareas';
+			$context = stream_context_create(array(
+				'ssl' => array('verify_peer' => false, 'verify_peer_name' => false),
+				'http' => array('timeout' => 5)
+			));
+			$node_response = @file_get_contents($node_url, false, $context);
+			if ($node_response !== false) {
+				log_message('ERROR', '[IMPORTAR] Node.js respondio: ' . $node_response);
+			} else {
+				log_message('ERROR', '[IMPORTAR] No se pudo conectar con Node.js en ' . $node_url . '. Verificar que el servidor Node este corriendo.');
+			}
+
+			echo $this->load->view('horarios/listado_view', $data, true);
+		}
 	}
 }

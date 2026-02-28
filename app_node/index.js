@@ -41,6 +41,14 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html',  { port: 'ALGO'});
 });
 
+// Endpoint para que PHP notifique cuando se importan nuevos horarios
+// PHP llama a: https://127.0.0.1:3000/reprogramar-tareas
+app.get('/reprogramar-tareas', function(req, res){
+    console.log('[REPROGRAMAR] Solicitud recibida desde PHP para reprogramar tareas');
+    programacion_tareas();
+    res.json({ status: 'ok', mensaje: 'Tareas reprogramadas', fecha: moment().format('YYYY-MM-DD HH:mm:ss') });
+});
+
 
 
 /*server.listen(3000, function(){
