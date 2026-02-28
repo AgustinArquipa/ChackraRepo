@@ -885,6 +885,62 @@ setTimeout(() => {
     }
 }, 10000);
 
+// Revisar la BD cada 30 segundos para detectar horarios nuevos o modificados
+// Esto soluciona el problema de que PHP guarde un horario y Node.js no se entere
+var ultimaRevision = '';
+setInterval(function(){
+    var fecha_hoy = moment().format('YYYY-MM-DD');
+    var hora_actual = getDateTime();
+
+    var sql = 'SELECT H.*, C.com_nombre_comando FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE H.hor_fecha = ?';
+    connection.query(sql, [fecha_hoy], function(error, results){
+        if (error) {
+            console.log('[MONITOR] Error al consultar horarios: ' + error.message);
+            return;
+        }
+
+        // Filtrar solo tareas futuras (que aun no pasaron)
+        var tareas_futuras = [];
+        for (var x in results) {
+            var h = rellenarCeros(results[x].hor_hora, 2);
+            var m = rellenarCeros(results[x].hor_minutos, 2);
+            var s = rellenarCeros(results[x].hor_segundos, 2);
+            var hora_tarea = h + ':' + m + ':' + s;
+            if (crear_tarea_silencioso(hora_tarea)) {
+                tareas_futuras.push({
+                    id: results[x].id_horarios,
+                    componente: results[x].com_nombre_comando,
+                    hora: hora_tarea,
+                    id_componentes: results[x].id_componentes,
+                    hor_hora: results[x].hor_hora,
+                    hor_minutos: results[x].hor_minutos,
+                    hor_segundos: results[x].hor_segundos
+                });
+            }
+        }
+
+        // Crear un "fingerprint" de las tareas futuras para detectar cambios
+        var fingerprint = JSON.stringify(tareas_futuras.map(function(t){ return t.id + '-' + t.hora; }));
+
+        if (fingerprint !== ultimaRevision && tareas_futuras.length > 0) {
+            console.log('[MONITOR] Detectados ' + tareas_futuras.length + ' horario(s) nuevo(s) o modificado(s). Reprogramando...');
+            ultimaRevision = fingerprint;
+            programacion_tareas();
+        }
+    });
+}, 30000);
+
+// Version silenciosa de crear_tarea (sin console.log para el monitor)
+function crear_tarea_silencioso(hora_tarea) {
+    var a = getDateTime();
+    var b = hora_tarea;
+    var aa1 = a.split(":");
+    var aa2 = b.split(":");
+    var d1 = new Date(2001, 0, 1, parseInt(aa1[0],10), parseInt(aa1[1],10), parseInt(aa1[2],10));
+    var d2 = new Date(2001, 0, 1, parseInt(aa2[0],10), parseInt(aa2[1],10), parseInt(aa2[2],10));
+    return d1.valueOf() < d2.valueOf();
+}
+
 //setInterval(pedirTemperaturaInicial,120000);
 
 /*function pedirTemperaturaInicial(){
