@@ -28,11 +28,12 @@ var token = 0;
 var token_recibido = 0;
 var ejecutando_sensado = false;
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
     host    : '127.0.0.1',
     user    : 'root',
     password: '',
-    database: 'chacra'
+    database: 'chacra',
+    connectionLimit: 10
 });
 
 app.use(express.static(__dirname + '/public'));
@@ -67,7 +68,7 @@ function cargaInicialSensores(rooms){
 
     connection.query(sql1, function (err, result_t00) {
         var temp_exterior;
-        if (typeof input !== "undefined") {
+        if (result_t00 && result_t00.length > 0) {
             temp_exterior = result_t00[0]['med_temperatura'];
         }else{
             temp_exterior = 0;
@@ -81,9 +82,9 @@ function cargaInicialSensores(rooms){
             result1.forEach(function(room, index) {
                 //console.log('COMPONENTE');
                 //console.log(room);
-                var sql = 'SELECT * FROM mediciones WHERE id_componentes = "' + room.id_componentes + '" ORDER BY id_mediciones DESC LIMIT 0,1';
+                var sql = 'SELECT * FROM mediciones WHERE id_componentes = ? ORDER BY id_mediciones DESC LIMIT 0,1';
                 //console.log(sql);
-                connection.query(sql, function (err, result2) {
+                connection.query(sql, [room.id_componentes], function (err, result2) {
                     //console.log('ENTRA EN MEDICIONES');
                     //console.log(result2);
                     if (result2.length > 0){
@@ -164,8 +165,8 @@ function cargaInicialLuces(rooms){
         result1.forEach(function(room, index) {
             //console.log('COMPONENTE');
             //console.log(room);
-            var sql = 'SELECT * FROM acciones WHERE id_componentes = "' + room.id_componentes + '" ORDER BY id_acciones DESC LIMIT 0,1';
-            connection.query(sql, function (err, result2) {
+            var sql = 'SELECT * FROM acciones WHERE id_componentes = ? ORDER BY id_acciones DESC LIMIT 0,1';
+            connection.query(sql, [room.id_componentes], function (err, result2) {
                 //console.log(result2);
                 if (err) throw err;
                 var numRows = result2.length;
@@ -335,9 +336,9 @@ function ConectarArduino(){
                                       temp_exterior = 0;    
                                   }
               
-                                  var sql = 'SELECT * FROM componentes WHERE com_nombre_comando = "T' + componente + '" ORDER BY id_componentes DESC LIMIT 0,1';
+                                  var sql = 'SELECT * FROM componentes WHERE com_nombre_comando = ? ORDER BY id_componentes DESC LIMIT 0,1';
                                   //console.log(sql);
-                                  connection.query(sql, function (err, result_componente) {
+                                  connection.query(sql, ['T' + componente], function (err, result_componente) {
                                         if (typeof result_componente[0] !== 'undefined') {
                                             if (parseFloat(result_componente[0]['com_calibracion_temperatura']) != 0){
                                                 var val_temp_old = val_temp;
@@ -379,16 +380,21 @@ function ConectarArduino(){
                                             } */
     
                                             try {
-                                                var sql = 'SELECT * FROM mediciones WHERE id_componentes = ' + result_componente[0].id_componentes + ' AND med_estado = "Iniciado" ORDER BY id_mediciones DESC LIMIT 0,1';
+                                                var sql = 'SELECT * FROM mediciones WHERE id_componentes = ? AND med_estado = "Iniciado" ORDER BY id_mediciones DESC LIMIT 0,1';
                                                 //console.log(sql);
-                                                connection.query(sql, function (err, result) {
+                                                connection.query(sql, [result_componente[0].id_componentes], function (err, result) {
                                                     if (err) throw err;
-                                                    var sql = 'UPDATE mediciones SET med_temperatura = "'+ val_temp +'", med_humedad = "'+ val_hum +'", med_temperatura_limite_inferior = "'+ result_componente[0]['com_limite_inferior_temperatura'] +'", med_temperatura_limite_superior = "'+ result_componente[0]['com_limite_superior_temperatura'] +'", med_humedad_limite_inferior = "'+result_componente[0]['com_limite_inferior_humedad']+'", med_humedad_limite_superior =  "'+result_componente[0]['com_limite_superior_humedad']+'", med_temperatura_estado = "'+alert_temp+'", med_humedad_estado = "'+alert_hum+'", med_estado = "Realizado"  WHERE id_mediciones = ' + result[0]['id_mediciones'];
-                                                    //console.log(sql);
-                                                    connection.query(sql, function (err, result) {
-                                                        if (err) throw err;
-                                                        console.log(ahora() + ': Medicion actualizada con exito.');
-                                                    });
+                                                    if (result && result.length > 0) {
+                                                        var sql = 'UPDATE mediciones SET med_temperatura = ?, med_humedad = ?, med_temperatura_limite_inferior = ?, med_temperatura_limite_superior = ?, med_humedad_limite_inferior = ?, med_humedad_limite_superior = ?, med_temperatura_estado = ?, med_humedad_estado = ?, med_estado = "Realizado" WHERE id_mediciones = ?';
+                                                        var sqlParams = [val_temp, val_hum, result_componente[0]['com_limite_inferior_temperatura'], result_componente[0]['com_limite_superior_temperatura'], result_componente[0]['com_limite_inferior_humedad'], result_componente[0]['com_limite_superior_humedad'], alert_temp, alert_hum, result[0]['id_mediciones']];
+                                                        //console.log(sql);
+                                                        connection.query(sql, sqlParams, function (err, result) {
+                                                            if (err) throw err;
+                                                            console.log(ahora() + ': Medicion actualizada con exito.');
+                                                        });
+                                                    } else {
+                                                        console.log(ahora() + ': No se encontro medicion con estado Iniciado para actualizar.');
+                                                    }
                                                 });                                            
                                             }catch(error) {
                                                 console.error(ahora() + ': ERROR EXCEPCION - ' + error);
@@ -434,9 +440,9 @@ function ConectarArduino(){
                                   console.log('No existe un PORT habilitado para responder a la recepcion de MEDICION DE TEMPERATURA (RECI).');
                               } */
                               var prox_componente = rellenarCeros(parseInt(componente) + 1, 2);
-                              var sql = 'SELECT * FROM componentes WHERE com_nombre_comando = "T' + prox_componente + '" ORDER BY id_componentes DESC LIMIT 0,1';
+                              var sql = 'SELECT * FROM componentes WHERE com_nombre_comando = ? ORDER BY id_componentes DESC LIMIT 0,1';
                               //console.log(sql);
-                              connection.query(sql, function (err, result_sensores) {
+                              connection.query(sql, ['T' + prox_componente], function (err, result_sensores) {
                                   /*if (result_sensores.length > 0){
                                       setTimeout(() => {
                                           if (typeof port !== "undefined") {
@@ -575,7 +581,6 @@ function enviarToken(existen_tareas){
             console.log('Empieza func Enviar Token');  
             if (typeof port !== "undefined") {
                 port.write("K" + token + "\n\r", (err) => {
-                    err = false;
                     console.log("WRITE ------> K" + token + "\n\r");
                     if (err){
                         return console.log('Erro al escribir: ', err.message);
@@ -667,8 +672,8 @@ function encender(data){
         //console.log(index);
         watches[index].start();
 
-        var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES ('+ data.id_componentes +', "Encender")';
-        connection.query(sql, function (err, result) {
+        var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES (?, "Encender")';
+        connection.query(sql, [data.id_componentes], function (err, result) {
             if (err) throw 'ERROR DE BASE DE DATOS: ' + err;
             console.log('1 registro guardado en ACCIONES ("Encender")');
         });   
@@ -710,9 +715,9 @@ function apagar(data){
                 })
             }, 1000);*/
         })         
-        var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES ('+ data.id_componentes +', "Apagar")';
+        var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES (?, "Apagar")';
         //console.log(sql);
-        connection.query(sql, function (err, result) {
+        connection.query(sql, [data.id_componentes], function (err, result) {
             if (err) throw 'ERROR DE BASE DE DATOS: ' + err;
             console.log('1 registro guardado en ACCIONES ("Apagar")');
         });   
@@ -766,8 +771,8 @@ io.on('connection', function(socket){
         console.log(indice);
         watches[indice].stop();
 
-        var sql = 'SELECT * FROM acciones WHERE id_componentes = ' + data.id_componentes + ' ORDER BY id_acciones DESC LIMIT 0,1';
-        connection.query(sql, function (err, result) {
+        var sql = 'SELECT * FROM acciones WHERE id_componentes = ? ORDER BY id_acciones DESC LIMIT 0,1';
+        connection.query(sql, [data.id_componentes], function (err, result) {
             if (err) throw err;
             if (result.length > 0){
                 if (result[0]['acc_tipos'] == "Encender"){
@@ -792,22 +797,15 @@ function programacion_tareas(){
     console.log('ENTRA A PROGRAMACION DE TAREAS');
     var alertas_task = [];
 
-    const connection = mysql.createConnection({
-        host    : '127.0.0.1',
-        user    : 'root',
-        password: '',
-        database: 'chacra'
-    });
-
     now = new Date();
     var dia = now.getDate();
     var mes = now.getMonth() +1;
     var anio = now.getFullYear();
-    fecha_ahora = anio + '-' + mes  + '-' + dia;
+    fecha_ahora = moment().format('YYYY-MM-DD');
 
-    var sql = 'SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = "' + fecha_ahora + '"';
-    
-    connection.query(sql, function(error, results, fields){
+    var sql = 'SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ?';
+
+    connection.query(sql, [fecha_ahora], function(error, results, fields){
         if (error) throw error;
         //console.log(results);
         if (results.length > 0){
@@ -892,8 +890,8 @@ async function comprobarExistenTareas(){
         var fecha_ahora = moment().format('YYYY-MM-DD');
         //console.log(fecha_ahora);
         
-        var sql = 'SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = "' + fecha_ahora + '"';
-        connection.query(sql, function(error, results, fields){
+        var sql = 'SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ?';
+        connection.query(sql, [fecha_ahora], function(error, results, fields){
             if ( error )
                 return reject( error );
 
@@ -961,8 +959,8 @@ function pedirTemperatura(existen_tareas){
                             }
 
                             //GUARDO LA SOLICITUD DE TEMPERATURA EN MEDICIONES COMO INICIADO, PARA DESPUES UNA VEZ QUE EL PIC RESPONDA, ACTUALIZAR LOS VALORES.
-                            var sql = 'INSERT INTO mediciones (id_componentes, med_estado) VALUES ('+ room.id_componentes +', "Iniciado")';
-                            connection.query(sql, function (err, result) {
+                            var sql = 'INSERT INTO mediciones (id_componentes, med_estado) VALUES (?, "Iniciado")';
+                            connection.query(sql, [room.id_componentes], function (err, result) {
                                 if (err) throw 'ERROR DE BASE DE DATOS: ' + err;
                                 console.log('1 registro guardado en MEDICIONES');
                             });   
@@ -1056,21 +1054,25 @@ function crear_tarea(hora_tarea){
     }
 }
 
-function mueveReloj(){ 
-    momentoActual = new Date() 
-    hora = momentoActual.getHours() 
-    minuto = momentoActual.getMinutes() 
-    segundo = momentoActual.getSeconds() 
-    if (hora<=9)
-        hora="0"+hora;
-    if (minuto<=9)
-        minuto="0"+minuto;
-    if (segundo<=9)
-        segundo="0"+segundo;
-    horaImprimible = hora + " : " + minuto + " : " + segundo;
+var mueveRelojIniciado = false;
+function mueveReloj(){
+    if (mueveRelojIniciado) return;
+    mueveRelojIniciado = true;
 
-    io.emit('hora_servidor', { horaImprimible: horaImprimible });  
-    setTimeout(mueveReloj,1000)
+    function tick() {
+        var momentoActual = new Date();
+        var h = momentoActual.getHours();
+        var m = momentoActual.getMinutes();
+        var s = momentoActual.getSeconds();
+        if (h <= 9) h = "0" + h;
+        if (m <= 9) m = "0" + m;
+        if (s <= 9) s = "0" + s;
+        var horaImprimible = h + " : " + m + " : " + s;
+
+        io.emit('hora_servidor', { horaImprimible: horaImprimible });
+        setTimeout(tick, 1000);
+    }
+    tick();
 }
 
 function formatDecimal(data){
@@ -1102,13 +1104,7 @@ function ejecutarTarea(nombre_comando, componente, hora, minuto, segundo, data, 
     var cron_string = segundo + ' ' + minuto + ' ' + hora + ' ' + dia + ' ' + mes + ' *';
     console.log('TASK ' + componente + ': ' + cron_string);                        
 
-        var task = cron.schedule(cron_string, () => {                            
-            const connection = mysql.createConnection({
-                host    : '127.0.0.1',
-                user    : 'root',
-                password: '',
-                database: 'chacra'
-            });
+        var task = cron.schedule(cron_string, () => {
 
             if (typeof port !== "undefined") {
                 var timeout = Math.floor((Math.random() * 800) + 1);
@@ -1122,8 +1118,8 @@ function ejecutarTarea(nombre_comando, componente, hora, minuto, segundo, data, 
                     })    
                 }, timeout);                                 
 
-                var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES (' + componente + ', "Encender")';
-                connection.query(sql, function (err, result) {
+                var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES (?, "Encender")';
+                connection.query(sql, [componente], function (err, result) {
                     if (err) throw err;
                     console.log('1 registro guardado en ACCIONES ("Encender")');
                 });

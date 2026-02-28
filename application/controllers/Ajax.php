@@ -273,7 +273,15 @@ class Ajax extends Firebase {
 			foreach ($cells as $cell){
 				$column = $obj->getActiveSheet()->getCell($cell)->getColumn();
 				$row = $obj->getActiveSheet()->getCell($cell)->getRow();
-				$data_value = $obj->getActiveSheet()->getCell($cell)->getValue();
+				$cellObj = $obj->getActiveSheet()->getCell($cell);
+				$data_value = $cellObj->getValue();
+
+				// Si la celda contiene un valor numerico que representa una hora de Excel,
+				// convertirlo a formato legible (PHPExcel almacena horas como fraccion del dia)
+				if ($row > 1 && is_numeric($data_value) && $data_value > 0 && $data_value < 1) {
+					$data_value = date("H:i:s", PHPExcel_Shared_Date::ExcelToPHP($data_value));
+				}
+
 				if ($row == 1){
 					$header[$row][$column] = $data_value;
 					$indices[$column] = $data_value;
@@ -300,11 +308,11 @@ class Ajax extends Firebase {
 							"id_componentes" => $id_componente,
 							"id_importaciones" => $primary_key
 						);
-						log_message('ERROR', print_r($nuevos_datos,1));
+						log_message('debug', print_r($nuevos_datos,1));
 						$horario = $this->horarios_model->get(NULL, $this->fechaMySQL($row['hor_fecha']), $id_componente);
 
 						if (is_null($horario)){
-							log_message('ERROR', "CARGA");
+							log_message('debug', "CARGA");
 							$this->horarios_model->save($nuevos_datos);
 						}else{
 							$this->horarios_model->update($horario[0]['id_horarios'], $nuevos_datos);

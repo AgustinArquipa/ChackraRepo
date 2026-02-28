@@ -76,7 +76,7 @@ Stopwatch.prototype.onTick = function() {
     var formattedTime = this.formatTime(this.time);
     this.emit('tick:stopwatch', formattedTime);
 
-    if (this.time === 0) {
+    if (this.time <= 0) {
         this.stop();
     }
 };

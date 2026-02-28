@@ -10,7 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/underscore": "^1.8.9",
-    "serialport": "^7.1.4"
+    "serialport": "^7.1.4",
+    "xlsx": "^0.18.5"
   },
   "dependencies": {
     "express": "^4.16.4",

@@ -26,7 +26,7 @@
             
             $consulta = $this->db->get();
             
-            log_message('ERROR', print_r($this->db->last_query(),1));
+            log_message('debug', print_r($this->db->last_query(),1));
             
             if ($consulta->num_rows() > 0){
                 return $consulta->result_array();

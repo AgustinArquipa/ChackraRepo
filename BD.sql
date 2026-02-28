@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `acciones` (
   `id_acciones` int(11) NOT NULL,
   `id_componentes` int(11) NOT NULL,
-  `acc_tipos` enum('Encender','Apagar') NOT NULL,
+  `acc_tipos` enum('Encender','Apagar','Corte Luz','Reestablecimiento Luz','Encender PIC') NOT NULL,
   `acc_fecha_alta` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
