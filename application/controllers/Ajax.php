@@ -266,20 +266,29 @@ class Ajax extends Firebase {
   
 			$this->load->library('Excel');
 			$file = APPPATH.'../assets/uploads/importaciones/'.$filename;
+			log_message('ERROR', '[IMPORTAR] Archivo cargado: ' . $file);
 			$obj = PHPExcel_IOFactory::load($file);
 			$cells = $obj->getActiveSheet()->getCellCollection();
 			$header = array();
 			$datos = array();
+			log_message('ERROR', '[IMPORTAR] Total celdas encontradas: ' . count($cells));
 			foreach ($cells as $cell){
 				$column = $obj->getActiveSheet()->getCell($cell)->getColumn();
 				$row = $obj->getActiveSheet()->getCell($cell)->getRow();
 				$cellObj = $obj->getActiveSheet()->getCell($cell);
 				$data_value = $cellObj->getValue();
 
+				// Log del valor crudo de cada celda de datos
+				if ($row > 1) {
+					log_message('ERROR', '[IMPORTAR] Celda ' . $cell . ' valor_crudo=' . print_r($data_value, true) . ' tipo=' . gettype($data_value));
+				}
+
 				// Si la celda contiene un valor numerico que representa una hora de Excel,
 				// convertirlo a formato legible (PHPExcel almacena horas como fraccion del dia)
 				if ($row > 1 && is_numeric($data_value) && $data_value > 0 && $data_value < 1) {
+					$data_value_original = $data_value;
 					$data_value = date("H:i:s", PHPExcel_Shared_Date::ExcelToPHP($data_value));
+					log_message('ERROR', '[IMPORTAR] Celda ' . $cell . ' convertida de numero Excel ' . $data_value_original . ' a hora: ' . $data_value);
 				}
 
 				if ($row == 1){
@@ -290,16 +299,28 @@ class Ajax extends Firebase {
 				}
 			}
 			$primary_key = '';
-  
-			//log_message('ERROR', print_r($datos, 1));
-			foreach ($datos as $row){
+
+			log_message('ERROR', '[IMPORTAR] Total filas de datos: ' . count($datos));
+			log_message('ERROR', '[IMPORTAR] Componente seleccionado: ' . $id_componente);
+
+			foreach ($datos as $row_idx => $row){
+				log_message('ERROR', '[IMPORTAR] Procesando fila ' . $row_idx . ': ' . print_r($row, true));
 				if (isset($row['hor_fecha']) && $row['hor_fecha'] != ''){
 					if (isset($row['hora_inicio']) && $row['hora_inicio'] != ''){
-						//log_message('ERROR', print_r($row,1));
 						$time = strtotime($row['hora_inicio']);
+						log_message('ERROR', '[IMPORTAR] strtotime("' . $row['hora_inicio'] . '") = ' . ($time === false ? 'FALSE (FALLO!)' : $time));
+
+						if ($time === false) {
+							log_message('ERROR', '[IMPORTAR] ERROR: No se pudo parsear la hora "' . $row['hora_inicio'] . '". Se omite esta fila.');
+							continue;
+						}
+
 						$hora = date("H", $time);
 						$minuto = date("i", $time);
 						$segundo = date("s", $time);
+
+						log_message('ERROR', '[IMPORTAR] Hora parseada: H=' . $hora . ' M=' . $minuto . ' S=' . $segundo);
+
 						$nuevos_datos = array(
 							"hor_fecha" => $row['hor_fecha'],
 							"hor_hora" => $hora,
@@ -308,17 +329,28 @@ class Ajax extends Firebase {
 							"id_componentes" => $id_componente,
 							"id_importaciones" => $primary_key
 						);
-						log_message('debug', print_r($nuevos_datos,1));
-						$horario = $this->horarios_model->get(NULL, $this->fechaMySQL($row['hor_fecha']), $id_componente);
+						log_message('ERROR', '[IMPORTAR] Datos a guardar: ' . print_r($nuevos_datos, true));
+
+						$fecha_mysql = $this->fechaMySQL($row['hor_fecha']);
+						log_message('ERROR', '[IMPORTAR] fechaMySQL("' . $row['hor_fecha'] . '") = "' . $fecha_mysql . '"');
+
+						$horario = $this->horarios_model->get(NULL, $fecha_mysql, $id_componente);
 
 						if (is_null($horario)){
-							log_message('debug', "CARGA");
-							$this->horarios_model->save($nuevos_datos);
+							log_message('ERROR', '[IMPORTAR] INSERT nuevo horario');
+							$result_save = $this->horarios_model->save($nuevos_datos);
+							log_message('ERROR', '[IMPORTAR] Resultado save: ' . print_r($result_save, true));
 						}else{
-							$this->horarios_model->update($horario[0]['id_horarios'], $nuevos_datos);
-						}						
+							log_message('ERROR', '[IMPORTAR] UPDATE horario existente id=' . $horario[0]['id_horarios']);
+							$result_update = $this->horarios_model->update($horario[0]['id_horarios'], $nuevos_datos);
+							log_message('ERROR', '[IMPORTAR] Resultado update: ' . print_r($result_update, true));
+						}
+					} else {
+						log_message('ERROR', '[IMPORTAR] Fila ' . $row_idx . ' omitida: hora_inicio no existe o esta vacia');
 					}
-				}			
+				} else {
+					log_message('ERROR', '[IMPORTAR] Fila ' . $row_idx . ' omitida: hor_fecha no existe o esta vacia');
+				}
 			}  
 			$data['componente'] = $this->componentes_model->get($id_componente);
 						

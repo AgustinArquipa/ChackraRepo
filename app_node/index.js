@@ -794,7 +794,7 @@ io.on('connection', function(socket){
 });
 
 function programacion_tareas(){
-    console.log('ENTRA A PROGRAMACION DE TAREAS');
+    console.log('[TAREAS] ====== INICIO PROGRAMACION DE TAREAS ======');
     var alertas_task = [];
 
     now = new Date();
@@ -803,27 +803,32 @@ function programacion_tareas(){
     var anio = now.getFullYear();
     fecha_ahora = moment().format('YYYY-MM-DD');
 
+    console.log('[TAREAS] Fecha de hoy (moment): ' + fecha_ahora);
+    console.log('[TAREAS] Hora actual: ' + getDateTime());
+
     var sql = 'SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ?';
+    console.log('[TAREAS] Query: ' + sql + ' | Param: [' + fecha_ahora + ']');
 
     connection.query(sql, [fecha_ahora], function(error, results, fields){
-        if (error) throw error;
-        //console.log(results);
+        if (error) {
+            console.log('[TAREAS] ERROR en query: ' + error.message);
+            throw error;
+        }
+        console.log('[TAREAS] Resultados encontrados: ' + results.length);
         if (results.length > 0){
             var x = 0;
             var task1, task2, task3, task4, task5;
             var timer_task = 50000;
 
             for (x in results){
-                //console.log(x);
-                //console.log(results[x]);
                 var hora = results[x].hor_hora;
                 var minutos = results[x].hor_minutos;
                 var segundo = results[x].hor_segundos;
-                var componente = results[x].id_componentes; 
-                var nombre_comando = results[x].com_nombre_comando; 
+                var componente = results[x].id_componentes;
+                var nombre_comando = results[x].com_nombre_comando;
                 var data = { 'com_nombre_comando': nombre_comando, 'id_componentes': componente };
-                var data_task = { 
-                    'com_nombre_comando':nombre_comando, 
+                var data_task = {
+                    'com_nombre_comando':nombre_comando,
                     'id_componentes': componente,
                     'hora': rellenarCeros(hora,2),
                     'minutos': rellenarCeros(minutos,2),
@@ -831,14 +836,14 @@ function programacion_tareas(){
                 };
 
                 var hora_completa_tarea = rellenarCeros(hora,2) + ":" + rellenarCeros(minutos,2) + ":" + rellenarCeros(segundo,2);
-                console.log(hora_completa_tarea);
-                if (crear_tarea(hora_completa_tarea)){ 
-                    alertas_task.push(data_task); 
-
+                console.log('[TAREAS] Tarea #' + x + ': componente=' + nombre_comando + ' hora=' + hora_completa_tarea + ' id_componentes=' + componente);
+                if (crear_tarea(hora_completa_tarea)){
+                    alertas_task.push(data_task);
+                    console.log('[TAREAS] >>> Tarea PROGRAMADA: ' + nombre_comando + ' a las ' + hora_completa_tarea);
                     ejecutarTarea(nombre_comando, componente, hora, minutos, segundo, data, dia, mes);
-                    
+
                 }else{
-                    console.log('Tarea Pasada. No se programa.');
+                    console.log('[TAREAS] >>> Tarea DESCARTADA (hora ya paso): ' + nombre_comando + ' ' + hora_completa_tarea + ' < ' + getDateTime());
                 }
 
                 //io.emit('alert_task', data_task);
@@ -857,15 +862,19 @@ function programacion_tareas(){
 
 //cron.schedule('*/10 * * * * *', () => {
 cron.schedule('0 10 0 * * *', () => {
-    console.log('Entra ' + i);
+    console.log('[CRON] Cron diario 00:10 disparado (iteracion ' + i + ')');
     programacion_tareas();
-    i++;      
+    i++;
 });
 
 setTimeout(() => {
+    console.log('[INICIO] Verificando si se requiere programacion manual...');
     if (tareas_manuales()){
+        console.log('[INICIO] Programacion MANUAL activada (hora actual > 00:10)');
         programacion_tareas();
-    }    
+    } else {
+        console.log('[INICIO] Programacion AUTOMATICA (se espera al cron de las 00:10)');
+    }
 }, 10000);
 
 //setInterval(pedirTemperaturaInicial,120000);
@@ -1046,10 +1055,10 @@ function crear_tarea(hora_tarea){
     var dd2=d2.valueOf();
 
     if(dd1<dd2){
-        console.log("Hora actual MENOR a hora de tarea. CREO TAREA.");
-        return true;        
+        console.log("[CREAR_TAREA] Hora actual (" + a + ") < Hora tarea (" + hora_tarea + ") => CREO TAREA");
+        return true;
     }else{
-        console.log("Hora actual MAYOR a hora de tarea. NO CREO TAREA.");
+        console.log("[CREAR_TAREA] Hora actual (" + a + ") >= Hora tarea (" + hora_tarea + ") => NO CREO TAREA (ya paso)");
         return false;
     }
 }
@@ -1100,42 +1109,51 @@ function rellenarCeros(number, width) {
     }
 } 
 
-function ejecutarTarea(nombre_comando, componente, hora, minuto, segundo, data, dia, mes){    
+function ejecutarTarea(nombre_comando, componente, hora, minuto, segundo, data, dia, mes){
     var cron_string = segundo + ' ' + minuto + ' ' + hora + ' ' + dia + ' ' + mes + ' *';
-    console.log('TASK ' + componente + ': ' + cron_string);                        
+    console.log('[EJECUTAR] Registrando cron: "' + cron_string + '" para componente ' + nombre_comando + ' (id=' + componente + ')');
+    console.log('[EJECUTAR] Se ejecutara a las ' + rellenarCeros(hora,2) + ':' + rellenarCeros(minuto,2) + ':' + rellenarCeros(segundo,2) + ' del ' + dia + '/' + mes);
 
         var task = cron.schedule(cron_string, () => {
+            console.log('[EJECUTAR] >>>>>> CRON DISPARADO! Componente: ' + nombre_comando + ' a las ' + getDateTime());
 
             if (typeof port !== "undefined") {
                 var timeout = Math.floor((Math.random() * 800) + 1);
-                console.log("Timeout 1: " + timeout);
+                console.log('[EJECUTAR] Enviando comando al puerto serial con timeout de ' + timeout + 'ms');
                 setTimeout(() => {
                     port.write(nombre_comando + "E\n\r", (err) => {
-                        console.log("WRITE ------> " + nombre_comando + "E\n\r");
+                        console.log('[EJECUTAR] WRITE ------> ' + nombre_comando + 'E');
                         if (err){
-                            return console.log('Erro al escribir: ', err.message);
-                        }                                            
-                    })    
-                }, timeout);                                 
+                            console.log('[EJECUTAR] ERROR al escribir al puerto: ' + err.message);
+                            return;
+                        }
+                        console.log('[EJECUTAR] Comando enviado exitosamente al puerto serial');
+                    })
+                }, timeout);
 
                 var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES (?, "Encender")';
                 connection.query(sql, [componente], function (err, result) {
-                    if (err) throw err;
-                    console.log('1 registro guardado en ACCIONES ("Encender")');
+                    if (err) {
+                        console.log('[EJECUTAR] ERROR al guardar accion en BD: ' + err.message);
+                        throw err;
+                    }
+                    console.log('[EJECUTAR] Accion "Encender" guardada en BD para componente ' + nombre_comando);
                 });
-                         
+
                 var data = { 'com_nombre_comando':nombre_comando, 'id_componentes': componente }
                 io.emit('tarea_encender', data);
-                
-                console.log('Ejecucion de la tarea COMPONENTE ' + nombre_comando + ' a las ' + hora + ':' + minuto + ':' + segundo + ' en America/Argentina/Buenos_Aires');                                   
-                io.emit('alerta',{'tipo':'success','mensaje':'Ejecución de la tarea COMPONENTE ' + nombre_comando + ' a las ' + hora + ':' + minuto + ':' + segundo + ' en America/Argentina/Buenos_Aires'});  
+
+                console.log('[EJECUTAR] Tarea ejecutada OK: ' + nombre_comando + ' a las ' + hora + ':' + minuto + ':' + segundo);
+                io.emit('alerta',{'tipo':'success','mensaje':'Ejecución de la tarea COMPONENTE ' + nombre_comando + ' a las ' + hora + ':' + minuto + ':' + segundo + ' en America/Argentina/Buenos_Aires'});
             }else{
-                console.log('No existe un PORT habilitado para ejecutar la tarea programada.');
-                io.emit('alerta',{'tipo':'error','mensaje':'No existe un PORT habilitado para ejecutar la tarea programada.'});  
-            }   
+                console.log('[EJECUTAR] ERROR: No existe un PORT habilitado para ejecutar la tarea programada.');
+                io.emit('alerta',{'tipo':'error','mensaje':'No existe un PORT habilitado para ejecutar la tarea programada.'});
+            }
             task.destroy();
+            console.log('[EJECUTAR] Cron destruido para ' + nombre_comando);
         }, {
             scheduled: true,
             timezone: "America/Argentina/Buenos_Aires"
-        }); 
+        });
+        console.log('[EJECUTAR] Cron registrado exitosamente para ' + nombre_comando);
 }
