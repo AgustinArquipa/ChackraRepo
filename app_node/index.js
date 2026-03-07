@@ -5,6 +5,20 @@ const express = require('express');
 const socketIO = require('socket.io');
 const app = express();
 const fs = require('fs');
+const path = require('path');
+const logFile = fs.createWriteStream(path.join(__dirname, 'server.log'), { flags: 'a' });
+const originalConsoleLog = console.log;
+const originalConsoleError = console.error;
+console.log = function() {
+    var msg = '[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] ' + Array.prototype.slice.call(arguments).join(' ');
+    logFile.write(msg + '\n');
+    originalConsoleLog.apply(console, arguments);
+};
+console.error = function() {
+    var msg = '[ERROR ' + moment().format('YYYY-MM-DD HH:mm:ss') + '] ' + Array.prototype.slice.call(arguments).join(' ');
+    logFile.write(msg + '\n');
+    originalConsoleError.apply(console, arguments);
+};
 const options = {
     key: fs.readFileSync('cert.key'),
     cert: fs.readFileSync('cert.pem')
@@ -676,10 +690,6 @@ function encender(data){
             }, 500);*/
         })
         
-        var index = rooms.indexOf(data.com_nombre_comando.toString());
-        //console.log(index);
-        watches[index].start();
-
         var sql = 'INSERT INTO acciones (id_componentes, acc_tipos) VALUES (?, "Encender")';
         connection.query(sql, [data.id_componentes], function (err, result) {
             if (err) throw 'ERROR DE BASE DE DATOS: ' + err;
@@ -880,26 +890,25 @@ setTimeout(() => {
     if (tareas_manuales()){
         console.log('[INICIO] Programacion MANUAL activada (hora actual > 00:10)');
         programacion_tareas();
+        // Actualizar fingerprint para que el monitor de 30s no duplique tareas
+        setTimeout(function(){
+            calcularFingerprint(function(fp){ ultimaRevision = fp; });
+        }, 5000);
     } else {
         console.log('[INICIO] Programacion AUTOMATICA (se espera al cron de las 00:10)');
     }
 }, 10000);
 
-// Revisar la BD cada 30 segundos para detectar horarios nuevos o modificados
-// Esto soluciona el problema de que PHP guarde un horario y Node.js no se entere
-var ultimaRevision = '';
-setInterval(function(){
+// Calcular fingerprint de tareas futuras para detectar cambios
+function calcularFingerprint(callback) {
     var fecha_hoy = moment().format('YYYY-MM-DD');
-    var hora_actual = getDateTime();
-
     var sql = 'SELECT H.*, C.com_nombre_comando FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE H.hor_fecha = ?';
     connection.query(sql, [fecha_hoy], function(error, results){
         if (error) {
-            console.log('[MONITOR] Error al consultar horarios: ' + error.message);
+            console.log('[FINGERPRINT] Error al consultar horarios: ' + error.message);
+            callback('');
             return;
         }
-
-        // Filtrar solo tareas futuras (que aun no pasaron)
         var tareas_futuras = [];
         for (var x in results) {
             var h = rellenarCeros(results[x].hor_hora, 2);
@@ -907,23 +916,20 @@ setInterval(function(){
             var s = rellenarCeros(results[x].hor_segundos, 2);
             var hora_tarea = h + ':' + m + ':' + s;
             if (crear_tarea_silencioso(hora_tarea)) {
-                tareas_futuras.push({
-                    id: results[x].id_horarios,
-                    componente: results[x].com_nombre_comando,
-                    hora: hora_tarea,
-                    id_componentes: results[x].id_componentes,
-                    hor_hora: results[x].hor_hora,
-                    hor_minutos: results[x].hor_minutos,
-                    hor_segundos: results[x].hor_segundos
-                });
+                tareas_futuras.push({ id: results[x].id_horarios, hora: hora_tarea });
             }
         }
+        callback(JSON.stringify(tareas_futuras.map(function(t){ return t.id + '-' + t.hora; })));
+    });
+}
 
-        // Crear un "fingerprint" de las tareas futuras para detectar cambios
-        var fingerprint = JSON.stringify(tareas_futuras.map(function(t){ return t.id + '-' + t.hora; }));
-
-        if (fingerprint !== ultimaRevision && tareas_futuras.length > 0) {
-            console.log('[MONITOR] Detectados ' + tareas_futuras.length + ' horario(s) nuevo(s) o modificado(s). Reprogramando...');
+// Revisar la BD cada 30 segundos para detectar horarios nuevos o modificados
+// Esto soluciona el problema de que PHP guarde un horario y Node.js no se entere
+var ultimaRevision = '';
+setInterval(function(){
+    calcularFingerprint(function(fingerprint){
+        if (fingerprint !== ultimaRevision && fingerprint !== '[]') {
+            console.log('[MONITOR] Detectados horario(s) nuevo(s) o modificado(s). Reprogramando...');
             ultimaRevision = fingerprint;
             programacion_tareas();
         }
