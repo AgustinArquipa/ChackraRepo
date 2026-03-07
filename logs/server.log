@@ -1,0 +1,182 @@
+[2026-03-07 14:57:09] Empieza func Enviar Token
+[2026-03-07 14:57:09] No existe un PORT habilitado para ejecutar tarea: enviarToken()
+[2026-03-07 14:57:09] [object Object]
+[2026-03-07 14:57:09] ARDUINO CONECTADO
+[2026-03-07 14:57:09] true
+[2026-03-07 14:57:10] WRITE ------> 0000
+
+[2026-03-07 14:57:10] Conexion Serial abierta
+[2026-03-07 14:57:10] READ -------> CHACRA - Arduino Nano Iniciado.
+[2026-03-07 14:57:10] A
+[2026-03-07 14:57:10] 
+[ERROR 2026-03-07 14:57:10] Error: ER_EMPTY_QUERY: Query was empty
+[2026-03-07 14:57:11] Sat Mar 07 2026 07:00:36 GMT+0000 - Sat Mar 07 2026 14:57:11 GMT+0000
+[2026-03-07 14:57:11] -28595000
+[2026-03-07 14:57:11] Sat Mar 07 2026 07:01:06 GMT+0000 - Sat Mar 07 2026 14:57:11 GMT+0000
+[2026-03-07 14:57:11] -28565000
+[2026-03-07 14:57:11] Sat Mar 07 2026 07:01:21 GMT+0000 - Sat Mar 07 2026 14:57:11 GMT+0000
+[2026-03-07 14:57:11] -28550000
+[2026-03-07 14:57:11] Sat Mar 07 2026 07:01:06 GMT+0000 - Sat Mar 07 2026 14:57:11 GMT+0000
+[2026-03-07 14:57:11] -28565000
+[2026-03-07 14:57:11] Sat Mar 07 2026 07:01:21 GMT+0000 - Sat Mar 07 2026 14:57:11 GMT+0000
+[2026-03-07 14:57:11] -28550000
+[2026-03-07 14:57:13] Usuario Conectado
+[2026-03-07 14:57:16] WRITE ------> GS00
+
+[2026-03-07 14:57:16] Solicitud de TEMPERATURA EXTERNA: GS00
+
+[2026-03-07 14:57:16] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:19] [INICIO] Verificando si se requiere programacion manual...
+[2026-03-07 14:57:19] Hora actual MAYOR a hora de programacion. PROGRAMACION MANUAL
+[2026-03-07 14:57:19] [INICIO] Programacion MANUAL activada (hora actual > 00:10)
+[2026-03-07 14:57:19] [TAREAS] ====== INICIO PROGRAMACION DE TAREAS ======
+[2026-03-07 14:57:19] [TAREAS] Fecha de hoy (moment): 2026-03-07
+[2026-03-07 14:57:19] [TAREAS] Hora actual: 14:57:19
+[2026-03-07 14:57:19] [TAREAS] Query: SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ? | Param: [2026-03-07]
+[2026-03-07 14:57:19] [TAREAS] Resultados encontrados: 5
+[2026-03-07 14:57:19] [TAREAS] Tarea #0: componente=L05 hora=07:00:36 id_componentes=5
+[2026-03-07 14:57:19] [CREAR_TAREA] Hora actual (14:57:19) >= Hora tarea (07:00:36) => NO CREO TAREA (ya paso)
+[2026-03-07 14:57:19] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L05 07:00:36 < 14:57:19
+[2026-03-07 14:57:19] [TAREAS] Tarea #1: componente=L01 hora=07:01:06 id_componentes=1
+[2026-03-07 14:57:19] [CREAR_TAREA] Hora actual (14:57:19) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 14:57:19] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L01 07:01:06 < 14:57:19
+[2026-03-07 14:57:19] [TAREAS] Tarea #2: componente=L02 hora=07:01:21 id_componentes=2
+[2026-03-07 14:57:19] [CREAR_TAREA] Hora actual (14:57:19) >= Hora tarea (07:01:21) => NO CREO TAREA (ya paso)
+[2026-03-07 14:57:19] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L02 07:01:21 < 14:57:19
+[2026-03-07 14:57:19] [TAREAS] Tarea #3: componente=L03 hora=07:01:06 id_componentes=3
+[2026-03-07 14:57:19] [CREAR_TAREA] Hora actual (14:57:19) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 14:57:19] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L03 07:01:06 < 14:57:19
+[2026-03-07 14:57:19] [TAREAS] Tarea #4: componente=L04 hora=07:01:21 id_componentes=4
+[2026-03-07 14:57:19] [CREAR_TAREA] Hora actual (14:57:19) >= Hora tarea (07:01:21) => NO CREO TAREA (ya paso)
+[2026-03-07 14:57:19] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L04 07:01:21 < 14:57:19
+[2026-03-07 14:57:21] WRITE ------> GS01
+
+[2026-03-07 14:57:21] Solicitud de TEMPERATURA EXTERNA: GS01
+
+[2026-03-07 14:57:21] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:26] WRITE ------> GS02
+
+[2026-03-07 14:57:26] Solicitud de TEMPERATURA EXTERNA: GS02
+
+[2026-03-07 14:57:26] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:31] WRITE ------> GS03
+
+[2026-03-07 14:57:31] Solicitud de TEMPERATURA EXTERNA: GS03
+
+[2026-03-07 14:57:31] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:36] WRITE ------> GS04
+
+[2026-03-07 14:57:36] Solicitud de TEMPERATURA EXTERNA: GS04
+
+[2026-03-07 14:57:36] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:41] WRITE ------> GS05
+
+[2026-03-07 14:57:41] Solicitud de TEMPERATURA EXTERNA: GS05
+
+[2026-03-07 14:57:41] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:46] WRITE ------> GS06
+
+[2026-03-07 14:57:46] Solicitud de TEMPERATURA EXTERNA: GS06
+
+[2026-03-07 14:57:46] 1 registro guardado en MEDICIONES
+[2026-03-07 14:57:51] WRITE ------> GS07
+
+[2026-03-07 14:57:51] Solicitud de TEMPERATURA EXTERNA: GS07
+
+[2026-03-07 14:57:51] 1 registro guardado en MEDICIONES
+[2026-03-07 15:00:31] [REPROGRAMAR] Solicitud recibida desde PHP para reprogramar tareas
+[2026-03-07 15:00:31] [TAREAS] ====== INICIO PROGRAMACION DE TAREAS ======
+[2026-03-07 15:00:31] [TAREAS] Fecha de hoy (moment): 2026-03-07
+[2026-03-07 15:00:31] [TAREAS] Hora actual: 15:00:31
+[2026-03-07 15:00:31] [TAREAS] Query: SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ? | Param: [2026-03-07]
+[2026-03-07 15:00:31] [TAREAS] Resultados encontrados: 5
+[2026-03-07 15:00:31] [TAREAS] Tarea #0: componente=L05 hora=07:00:36 id_componentes=5
+[2026-03-07 15:00:31] [CREAR_TAREA] Hora actual (15:00:31) >= Hora tarea (07:00:36) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:31] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L05 07:00:36 < 15:00:31
+[2026-03-07 15:00:31] [TAREAS] Tarea #1: componente=L01 hora=07:01:06 id_componentes=1
+[2026-03-07 15:00:31] [CREAR_TAREA] Hora actual (15:00:31) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:31] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L01 07:01:06 < 15:00:31
+[2026-03-07 15:00:31] [TAREAS] Tarea #2: componente=L02 hora=07:01:21 id_componentes=2
+[2026-03-07 15:00:31] [CREAR_TAREA] Hora actual (15:00:31) >= Hora tarea (07:01:21) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:31] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L02 07:01:21 < 15:00:31
+[2026-03-07 15:00:31] [TAREAS] Tarea #3: componente=L03 hora=07:01:06 id_componentes=3
+[2026-03-07 15:00:31] [CREAR_TAREA] Hora actual (15:00:31) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:31] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L03 07:01:06 < 15:00:31
+[2026-03-07 15:00:31] [TAREAS] Tarea #4: componente=L04 hora=15:02:00 id_componentes=4
+[2026-03-07 15:00:31] [CREAR_TAREA] Hora actual (15:00:31) < Hora tarea (15:02:00) => CREO TAREA
+[2026-03-07 15:00:31] [TAREAS] >>> Tarea PROGRAMADA: L04 a las 15:02:00
+[2026-03-07 15:00:31] [EJECUTAR] Registrando cron: "0 2 15 7 3 *" para componente L04 (id=4)
+[2026-03-07 15:00:31] [EJECUTAR] Se ejecutara a las 15:02:00 del 7/3
+[2026-03-07 15:00:31] [EJECUTAR] Cron registrado exitosamente para L04
+[2026-03-07 15:00:39] [MONITOR] Detectados horario(s) nuevo(s) o modificado(s). Reprogramando...
+[2026-03-07 15:00:39] [TAREAS] ====== INICIO PROGRAMACION DE TAREAS ======
+[2026-03-07 15:00:39] [TAREAS] Fecha de hoy (moment): 2026-03-07
+[2026-03-07 15:00:39] [TAREAS] Hora actual: 15:00:39
+[2026-03-07 15:00:39] [TAREAS] Query: SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ? | Param: [2026-03-07]
+[2026-03-07 15:00:39] [TAREAS] Resultados encontrados: 5
+[2026-03-07 15:00:39] [TAREAS] Tarea #0: componente=L05 hora=07:00:36 id_componentes=5
+[2026-03-07 15:00:39] [CREAR_TAREA] Hora actual (15:00:39) >= Hora tarea (07:00:36) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:39] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L05 07:00:36 < 15:00:39
+[2026-03-07 15:00:39] [TAREAS] Tarea #1: componente=L01 hora=07:01:06 id_componentes=1
+[2026-03-07 15:00:39] [CREAR_TAREA] Hora actual (15:00:39) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:39] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L01 07:01:06 < 15:00:39
+[2026-03-07 15:00:39] [TAREAS] Tarea #2: componente=L02 hora=07:01:21 id_componentes=2
+[2026-03-07 15:00:39] [CREAR_TAREA] Hora actual (15:00:39) >= Hora tarea (07:01:21) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:39] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L02 07:01:21 < 15:00:39
+[2026-03-07 15:00:39] [TAREAS] Tarea #3: componente=L03 hora=07:01:06 id_componentes=3
+[2026-03-07 15:00:39] [CREAR_TAREA] Hora actual (15:00:39) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 15:00:39] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L03 07:01:06 < 15:00:39
+[2026-03-07 15:00:39] [TAREAS] Tarea #4: componente=L04 hora=15:02:00 id_componentes=4
+[2026-03-07 15:00:39] [CREAR_TAREA] Hora actual (15:00:39) < Hora tarea (15:02:00) => CREO TAREA
+[2026-03-07 15:00:39] [TAREAS] >>> Tarea PROGRAMADA: L04 a las 15:02:00
+[2026-03-07 15:00:39] [EJECUTAR] Registrando cron: "0 2 15 7 3 *" para componente L04 (id=4)
+[2026-03-07 15:00:39] [EJECUTAR] Se ejecutara a las 15:02:00 del 7/3
+[2026-03-07 15:00:39] [EJECUTAR] Cron registrado exitosamente para L04
+[2026-03-07 15:01:28] [REPROGRAMAR] Solicitud recibida desde PHP para reprogramar tareas
+[2026-03-07 15:01:28] [TAREAS] ====== INICIO PROGRAMACION DE TAREAS ======
+[2026-03-07 15:01:28] [TAREAS] Fecha de hoy (moment): 2026-03-07
+[2026-03-07 15:01:28] [TAREAS] Hora actual: 15:01:28
+[2026-03-07 15:01:28] [TAREAS] Query: SELECT * FROM horarios H INNER JOIN componentes C ON H.id_componentes = C.id_componentes WHERE hor_fecha = ? | Param: [2026-03-07]
+[2026-03-07 15:01:28] [TAREAS] Resultados encontrados: 5
+[2026-03-07 15:01:28] [TAREAS] Tarea #0: componente=L05 hora=07:00:36 id_componentes=5
+[2026-03-07 15:01:28] [CREAR_TAREA] Hora actual (15:01:28) >= Hora tarea (07:00:36) => NO CREO TAREA (ya paso)
+[2026-03-07 15:01:28] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L05 07:00:36 < 15:01:28
+[2026-03-07 15:01:28] [TAREAS] Tarea #1: componente=L01 hora=07:01:06 id_componentes=1
+[2026-03-07 15:01:28] [CREAR_TAREA] Hora actual (15:01:28) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 15:01:28] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L01 07:01:06 < 15:01:28
+[2026-03-07 15:01:28] [TAREAS] Tarea #2: componente=L02 hora=07:01:21 id_componentes=2
+[2026-03-07 15:01:28] [CREAR_TAREA] Hora actual (15:01:28) >= Hora tarea (07:01:21) => NO CREO TAREA (ya paso)
+[2026-03-07 15:01:28] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L02 07:01:21 < 15:01:28
+[2026-03-07 15:01:28] [TAREAS] Tarea #3: componente=L03 hora=07:01:06 id_componentes=3
+[2026-03-07 15:01:28] [CREAR_TAREA] Hora actual (15:01:28) >= Hora tarea (07:01:06) => NO CREO TAREA (ya paso)
+[2026-03-07 15:01:28] [TAREAS] >>> Tarea DESCARTADA (hora ya paso): L03 07:01:06 < 15:01:28
+[2026-03-07 15:01:28] [TAREAS] Tarea #4: componente=L04 hora=15:02:00 id_componentes=4
+[2026-03-07 15:01:28] [CREAR_TAREA] Hora actual (15:01:28) < Hora tarea (15:02:00) => CREO TAREA
+[2026-03-07 15:01:28] [TAREAS] >>> Tarea PROGRAMADA: L04 a las 15:02:00
+[2026-03-07 15:01:28] [EJECUTAR] Registrando cron: "0 2 15 7 3 *" para componente L04 (id=4)
+[2026-03-07 15:01:28] [EJECUTAR] Se ejecutara a las 15:02:00 del 7/3
+[2026-03-07 15:01:28] [EJECUTAR] Cron registrado exitosamente para L04
+[2026-03-07 15:02:00] [EJECUTAR] >>>>>> CRON DISPARADO! Componente: L04 a las 15:02:00
+[2026-03-07 15:02:00] [EJECUTAR] Enviando comando al puerto serial con timeout de 231ms
+[2026-03-07 15:02:00] [EJECUTAR] Tarea ejecutada OK: L04 a las 15:2:0
+[2026-03-07 15:02:00] [EJECUTAR] Cron destruido para L04
+[2026-03-07 15:02:00] [EJECUTAR] >>>>>> CRON DISPARADO! Componente: L04 a las 15:02:00
+[2026-03-07 15:02:00] [EJECUTAR] Enviando comando al puerto serial con timeout de 495ms
+[2026-03-07 15:02:00] [EJECUTAR] Tarea ejecutada OK: L04 a las 15:2:0
+[2026-03-07 15:02:00] [EJECUTAR] Cron destruido para L04
+[2026-03-07 15:02:00] [EJECUTAR] >>>>>> CRON DISPARADO! Componente: L04 a las 15:02:00
+[2026-03-07 15:02:00] [EJECUTAR] Enviando comando al puerto serial con timeout de 344ms
+[2026-03-07 15:02:00] [EJECUTAR] Tarea ejecutada OK: L04 a las 15:2:0
+[2026-03-07 15:02:00] [EJECUTAR] Cron destruido para L04
+[2026-03-07 15:02:00] [EJECUTAR] Accion "Encender" guardada en BD para componente L04
+[2026-03-07 15:02:00] [EJECUTAR] Accion "Encender" guardada en BD para componente L04
+[2026-03-07 15:02:00] [EJECUTAR] Accion "Encender" guardada en BD para componente L04
+[2026-03-07 15:02:00] [EJECUTAR] WRITE ------> L04E
+[2026-03-07 15:02:00] [EJECUTAR] Comando enviado exitosamente al puerto serial
+[2026-03-07 15:02:00] READ -------> OK L04E
+[2026-03-07 15:02:00] [EJECUTAR] WRITE ------> L04E
+[2026-03-07 15:02:00] [EJECUTAR] Comando enviado exitosamente al puerto serial
+[2026-03-07 15:02:00] READ -------> OK L04E
+[2026-03-07 15:02:00] [EJECUTAR] WRITE ------> L04E
+[2026-03-07 15:02:00] [EJECUTAR] Comando enviado exitosamente al puerto serial
+[2026-03-07 15:02:00] READ -------> OK L04E
