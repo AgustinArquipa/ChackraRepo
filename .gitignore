@@ -28,3 +28,4 @@ guiame-app/*
 
 app_node/node_modules
 app_node/npm-debug.log
+app_node/logs/

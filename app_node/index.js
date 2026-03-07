@@ -6,17 +6,36 @@ const socketIO = require('socket.io');
 const app = express();
 const fs = require('fs');
 const path = require('path');
-const logFile = fs.createWriteStream(path.join(__dirname, 'server.log'), { flags: 'a' });
+var moment = require('moment');
+
+const logsDir = path.join(__dirname, 'logs');
+if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+}
+
+let currentLogDate = '';
+let logFile = null;
+
+function getLogFile() {
+    const today = moment().format('YYYY-MM-DD');
+    if (today !== currentLogDate) {
+        if (logFile) logFile.end();
+        currentLogDate = today;
+        logFile = fs.createWriteStream(path.join(logsDir, `server-${today}.log`), { flags: 'a' });
+    }
+    return logFile;
+}
+
 const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
 console.log = function() {
     var msg = '[' + moment().format('YYYY-MM-DD HH:mm:ss') + '] ' + Array.prototype.slice.call(arguments).join(' ');
-    logFile.write(msg + '\n');
+    getLogFile().write(msg + '\n');
     originalConsoleLog.apply(console, arguments);
 };
 console.error = function() {
     var msg = '[ERROR ' + moment().format('YYYY-MM-DD HH:mm:ss') + '] ' + Array.prototype.slice.call(arguments).join(' ');
-    logFile.write(msg + '\n');
+    getLogFile().write(msg + '\n');
     originalConsoleError.apply(console, arguments);
 };
 const options = {
@@ -26,7 +45,6 @@ const options = {
 //const server = https.createServer(app);
 const server = https.createServer(options, app).listen(3000);
 const io = socketIO.listen(server);
-var moment = require('moment');
 io.set('origins', '*:*');
 
 
